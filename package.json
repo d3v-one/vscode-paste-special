@@ -1,0 +1,81 @@
+{
+	"name": "pastespecial",
+	"displayName": "%displayName%",
+	"description": "%description%",
+	"version": "0.9.0",
+	"publisher": "d3v",
+	"license": "MIT",
+	"icon": "images/paste.png",
+	"homepage": "https://d3v.one",
+	"repository": {
+    "type": "git",
+    "url": "https://github.com/d3v-one/vscode-paste-special.git"
+  },
+	"galleryBanner": {
+		"color": "#616f8c",
+		"theme": "dark"
+	},
+	"keywords": [
+		"paste",
+		"paste special",
+		"paste as",
+		"clipboard",
+		"formats"
+	],
+	"engines": {
+		"vscode": "^1.40.0"
+	},
+	"categories": [
+		"Other"
+	],
+	"activationEvents": [
+		"*",
+		"onCommand:extension.pastespecial"
+	],
+	"main": "./out/extension.js",
+	"contributes": {
+		"commands": [
+			{
+				"command": "extension.pastespecial",
+				"title": "Paste Special..."
+			}
+		],
+		"menus": {
+      "editor/context": [
+        {
+          "command": "extension.pastespecial",
+          "group": "9_cutcopypaste@4",
+					"when": "editorTextFocus"
+        }
+      ]
+		},
+		"keybindings": [
+      {
+        "command": "extension.pastespecial",
+        "key": "alt+ctrl+V",
+        "win": "alt+ctrl+V",
+        "linux": "shift+ctrl+V",
+        "mac": "ctrl+cmd+V",
+        "when": "editorTextFocus"
+      }
+    ]
+	},
+	"scripts": {
+		"vscode:prepublish": "npm run compile",
+		"compile": "tsc -p ./",
+		"watch": "tsc -watch -p ./",
+		"pretest": "npm run compile",
+		"test": "node ./out/test/runTest.js"
+	},
+	"devDependencies": {
+		"@types/glob": "^7.1.1",
+		"@types/mocha": "^5.2.7",
+		"@types/node": "^12.11.7",
+		"@types/vscode": "^1.40.0",
+		"glob": "^7.1.5",
+		"mocha": "^6.2.2",
+		"typescript": "^3.6.4",
+		"tslint": "^5.20.0",
+		"vscode-test": "^1.2.2"
+	}
+}
