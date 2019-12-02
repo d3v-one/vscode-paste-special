@@ -1,6 +1,6 @@
 # Paste Special
 
-Paste different clipboard formats like text, HTML, RTF, CSV and file lists.
+A Visual Studio Code extension to paste different clipboard formats like text, HTML, RTF, CSV and file lists.
 
 ## Features
 
