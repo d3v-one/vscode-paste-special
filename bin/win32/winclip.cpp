@@ -7,10 +7,6 @@
 #include <sstream>
 #include <iomanip>
 
-#define CF_RTF	(49299)
-#define CF_HTML (49444)
-#define CF_CSV	(50166)
-
 typedef struct {
  UINT format;
  char *name;
@@ -41,13 +37,11 @@ FORMATDATA formatlist[] = {
 	{0, NULL}
 };
 
+UINT cf_html, cf_csv, cf_rtf;
 
 std::map<UINT, std::string> supportedFormats = {
 	{CF_UNICODETEXT, "Plain Text"},
-	{CF_HTML, "HTML source"},
-	{CF_RTF, "Rich Text Format"},
 	{CF_HDROP, "List of filenames"},
-	{CF_CSV, "Commma-separated values"}
 };
 
 
@@ -233,46 +227,30 @@ static void GetData(UINT format)
 		StopWithError(-3, "error retrieving data for format");
 		return;
 	}
-	switch (format) {
-		case CF_UNICODETEXT: {
-				std::string text = unicode2utf8((WCHAR*)pData);
-				CreateResponse(format, text);
-			}
-			break;
-		case CF_HDROP: {
-				HDROP hDrop =  (HDROP)pData;
-				UINT fileCount = DragQueryFile(hDrop, 0xFFFFFFFF, NULL, 0);
-				WCHAR buffer[MAX_PATH];
-				std::string filelist;
-				for (UINT i = 0; i < fileCount; i++) {
-					DragQueryFileW(hDrop, i, buffer, MAX_PATH);
-					std::string filename = unicode2utf8(buffer);
-					filelist += filename + "\r\n";
-				}			
-				CreateResponse(format, filelist);
-			}
-			break;
-		case CF_HTML: {
-				std::string text = (char*)pData;
-				text = ExtractEntity(text);
-				CreateResponse(format, text);
-			}
-			break;
-		case CF_CSV: {
-				std::string text = (char*)pData;
-				CreateResponse(format, text);
-			}
-			break;
-		case CF_RTF: {
-				std::string text = (char*)pData;
-				CreateResponse(format, text);
-			}
-			break;
-		case 49948: {
-				std::string text = unicode2utf8((WCHAR*)pData);
-				CreateResponse(format, text);
-			}
-			break;
+	if (format == CF_UNICODETEXT) {
+		std::string text = unicode2utf8((WCHAR*)pData);
+		CreateResponse(format, text);
+	} else if (format == CF_HDROP) {
+		HDROP hDrop =  (HDROP)pData;
+		UINT fileCount = DragQueryFile(hDrop, 0xFFFFFFFF, NULL, 0);
+		WCHAR buffer[MAX_PATH];
+		std::string filelist;
+		for (UINT i = 0; i < fileCount; i++) {
+			DragQueryFileW(hDrop, i, buffer, MAX_PATH);
+			std::string filename = unicode2utf8(buffer);
+			filelist += filename + "\r\n";
+		}			
+		CreateResponse(format, filelist);
+	} else if (format == cf_html) {
+		std::string text = (char*)pData;
+		text = ExtractEntity(text);
+		CreateResponse(format, text);
+	} else if (format == cf_csv) {
+		std::string text = (char*)pData;
+		CreateResponse(format, text);
+	} else if (format == cf_rtf) {
+		std::string text = (char*)pData;
+		CreateResponse(format, text);
 	}
 	GlobalUnlock(hData); 
 }
@@ -282,6 +260,15 @@ static void GetData(UINT format)
 int main(int argc, char **argv)
 {
 	if (OpenClipboard(NULL) == FALSE) return 1;
+
+	cf_html = RegisterClipboardFormat("HTML Format");
+	supportedFormats.insert(std::pair<UINT, std::string>(cf_html, "HTML source"));
+
+	cf_csv = RegisterClipboardFormat("Csv");
+	supportedFormats.insert(std::pair<UINT, std::string>(cf_csv, "Commma-separated values"));
+
+	cf_rtf = RegisterClipboardFormat("Rich Text Format");
+	supportedFormats.insert(std::pair<UINT, std::string>(cf_rtf, "Rich Text Format"));
 
 	if (argc > 1) {
 		if (argv[1][0] == '*') {

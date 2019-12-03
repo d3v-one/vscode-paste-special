@@ -2,7 +2,7 @@
 	"name": "pastespecial",
 	"displayName": "%displayName%",
 	"description": "%description%",
-	"version": "0.9.0",
+	"version": "0.9.1",
 	"publisher": "d3v",
 	"license": "MIT",
 	"icon": "images/paste.png",

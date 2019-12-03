@@ -46,6 +46,10 @@ None.
 
 ## Release Notes
 
+### 0.9.1
+
+Bug fixed regarding Windows registered clipboard formats
+
 ### 0.9.0
 
 Initial release
