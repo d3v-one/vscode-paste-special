@@ -19,9 +19,9 @@ At the moment, supported formats are:
 - HTML source
 - Rich Text Format
 - A list of URIs (e.g. filenames)
-- PNG images (as base64 endoded data url)
-- JPEG images (as base64 endoded data url) 
-- TIFF images (as base64 endoded data url) 
+- PNG images (as base64 encoded data URL)
+- JPEG images (as base64 encoded data URL) 
+- TIFF images (as base64 encoded data URL) 
 
 ### macOS
 - Plain Text
